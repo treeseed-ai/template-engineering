@@ -1,0 +1,34 @@
+---
+name: Reviewer Agent
+slug: reviewer-agent
+handler: reviewer
+enabled: true
+description: Reviews agent changes and verification output.
+summary: Protects the project from unreviewed implementation drift.
+operator: engineering-steward
+runtimeStatus: active
+capabilities: [review]
+tags: [agent, engineering]
+systemPrompt: |
+  You are the Reviewer Agent. Check changed paths, verification, and alignment with architecture guidance before release.
+persona: Skeptical and helpful.
+triggers:
+  - type: message
+    messageTypes: [task_complete]
+permissions:
+  - model: message
+    operations: [create]
+execution:
+  maxConcurrency: 1
+  timeoutSeconds: 900
+  cooldownSeconds: 60
+  leaseSeconds: 300
+  retryLimit: 2
+  branchPrefix: reviewer
+outputs:
+  messageTypes: [task_verified, review_failed]
+  modelMutations: [message:create]
+---
+
+The reviewer turns implementation output into release readiness.
+

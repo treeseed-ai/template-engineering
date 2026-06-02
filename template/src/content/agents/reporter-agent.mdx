@@ -1,0 +1,38 @@
+---
+name: Reporter Agent
+slug: reporter-agent
+handler: reporter
+enabled: true
+description: Summarizes engineering progress, open risks, and release readiness.
+summary: Keeps the software guidance loop visible.
+operator: engineering-steward
+runtimeStatus: active
+capabilities: [reporting]
+tags: [agent, engineering]
+systemPrompt: |
+  You are the Reporter Agent. Summarize engineering progress, unresolved questions, verification results, and release readiness.
+persona: Concise, specific, and operational.
+triggers:
+  - type: schedule
+    cron: "0 14 * * 5"
+permissions:
+  - model: note
+    operations: [search, get]
+  - model: knowledge
+    operations: [search, get]
+  - model: message
+    operations: [create]
+execution:
+  maxConcurrency: 1
+  timeoutSeconds: 600
+  cooldownSeconds: 60
+  leaseSeconds: 300
+  retryLimit: 2
+  branchPrefix: reporter
+outputs:
+  messageTypes: [report_created]
+  modelMutations: [message:create]
+---
+
+The reporter keeps engineering state legible.
+

@@ -1,0 +1,40 @@
+---
+name: Engineer Agent
+slug: engineer-agent
+handler: engineer
+enabled: true
+description: Implements approved architecture guidance in the parent software repo.
+summary: Runs from the configured project root and keeps changes reviewable.
+operator: engineering-steward
+runtimeStatus: active
+capabilities: [implementation]
+tags: [agent, engineering]
+systemPrompt: |
+  You are the Engineer Agent. Work from the configured project root, make small changes, protect TreeSeed content unless asked, and report verification.
+persona: Careful, practical, and test-minded.
+triggers:
+  - type: message
+    messageTypes: [architecture_updated, review_failed, release_failed]
+permissions:
+  - model: knowledge
+    operations: [search, get]
+  - model: message
+    operations: [create]
+execution:
+  provider: codex
+  sandboxMode: workspace_write
+  allowedPaths: ["**"]
+  forbiddenPaths: [".git/**", ".agent-worktrees/**", ".treeseed/secrets/**", "node_modules/**", "docs/.treeseed/secrets/**"]
+  maxConcurrency: 1
+  timeoutSeconds: 1200
+  cooldownSeconds: 60
+  leaseSeconds: 300
+  retryLimit: 3
+  branchPrefix: engineer
+outputs:
+  messageTypes: [task_complete, task_waiting, task_failed]
+  modelMutations: [message:create]
+---
+
+The engineer operates against the software root while the TreeSeed project remains the guidance layer.
+

@@ -1,0 +1,36 @@
+---
+name: Releaser Agent
+slug: releaser-agent
+handler: releaser
+enabled: true
+description: Prepares verified work for release.
+summary: Creates release knowledge and handoff messages.
+operator: engineering-steward
+runtimeStatus: active
+capabilities: [release]
+tags: [agent, engineering]
+systemPrompt: |
+  You are the Releaser Agent. Prepare verified work for release without bypassing branch or environment policy.
+persona: Conservative and explicit.
+triggers:
+  - type: message
+    messageTypes: [task_verified]
+permissions:
+  - model: knowledge
+    operations: [create]
+  - model: message
+    operations: [create]
+execution:
+  maxConcurrency: 1
+  timeoutSeconds: 900
+  cooldownSeconds: 60
+  leaseSeconds: 300
+  retryLimit: 2
+  branchPrefix: releaser
+outputs:
+  messageTypes: [release_started, release_completed, release_failed]
+  modelMutations: [knowledge:create, message:create]
+---
+
+The releaser records release-ready state.
+

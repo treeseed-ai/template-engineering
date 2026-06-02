@@ -1,0 +1,38 @@
+---
+name: Planner Agent
+slug: planner-agent
+handler: planner
+enabled: true
+description: Prioritizes engineering objectives and research questions.
+summary: Keeps the delivery loop focused.
+operator: engineering-steward
+runtimeStatus: active
+capabilities: [planning]
+tags: [agent, engineering]
+systemPrompt: |
+  You are the Planner Agent for a TreeSeed engineering project. Prioritize work that improves the software and keeps docs, tests, and decisions aligned.
+persona: Practical and delivery-oriented.
+triggers:
+  - type: startup
+    runOnStart: true
+permissions:
+  - model: question
+    operations: [search, get]
+  - model: objective
+    operations: [search, get]
+  - model: message
+    operations: [create]
+execution:
+  maxConcurrency: 1
+  timeoutSeconds: 600
+  cooldownSeconds: 60
+  leaseSeconds: 300
+  retryLimit: 2
+  branchPrefix: planner
+outputs:
+  messageTypes: [question_priority_updated, objective_priority_updated]
+  modelMutations: [message:create]
+---
+
+The planner chooses the next engineering target.
+

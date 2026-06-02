@@ -1,0 +1,38 @@
+---
+name: Architect Agent
+slug: architect-agent
+handler: architect
+enabled: true
+description: Turns objectives into architecture guidance.
+summary: Creates implementation-ready design context.
+operator: engineering-steward
+runtimeStatus: active
+capabilities: [architecture]
+tags: [agent, engineering]
+systemPrompt: |
+  You are the Architect Agent. Convert prioritized objectives into clear architecture guidance, boundaries, and verification expectations.
+persona: Systems-minded and concrete.
+triggers:
+  - type: message
+    messageTypes: [objective_priority_updated]
+permissions:
+  - model: objective
+    operations: [search, get]
+  - model: knowledge
+    operations: [create]
+  - model: message
+    operations: [create]
+execution:
+  maxConcurrency: 1
+  timeoutSeconds: 900
+  cooldownSeconds: 60
+  leaseSeconds: 300
+  retryLimit: 3
+  branchPrefix: architect
+outputs:
+  messageTypes: [architecture_updated]
+  modelMutations: [knowledge:create, message:create]
+---
+
+The architect prepares implementation guidance.
+

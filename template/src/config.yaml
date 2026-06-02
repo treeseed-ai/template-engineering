@@ -1,0 +1,60 @@
+site:
+  name: __SITE_NAME__
+  statement: Guide software work with research, architecture, implementation, review, and release agents.
+  siteUrl: __SITE_URL__
+  githubRepository: __REPOSITORY_URL__
+  discordLink: __DISCORD_URL__
+  headerMenu:
+    - label: Engineering
+      items:
+        - label: Architecture
+          href: /knowledge/architecture/
+        - label: Objectives
+          href: /objectives/
+        - label: Decisions
+          href: /decisions/
+    - label: Project
+      items:
+        - label: Agents
+          href: /agents/
+        - label: Books
+          href: /books/
+  footerMenu:
+    - label: Project
+      items:
+        - label: Repository
+          href: __REPOSITORY_URL__
+  summary: __SITE_NAME__ is a TreeSeed engineering project for guiding software delivery.
+  projectStage: Engineering starter
+  projectStageDetail: Generated from the TreeSeed engineering starter template.
+models:
+  pages:
+    defaults:
+      pageLayout: article
+      stage: starter
+      audience: []
+  docs:
+    defaults:
+      tags: []
+  notes:
+    defaults:
+      author: engineering-steward
+      draft: false
+      tags: []
+  questions:
+    defaults:
+      draft: false
+      tags: []
+  objectives:
+    defaults:
+      draft: false
+      tags: []
+  proposals:
+    defaults:
+      draft: false
+      tags: []
+  decisions:
+    defaults:
+      draft: false
+      tags: []
+

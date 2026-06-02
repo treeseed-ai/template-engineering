@@ -1,0 +1,38 @@
+---
+name: Researcher Agent
+slug: researcher-agent
+handler: researcher
+enabled: true
+description: Researches codebase and product questions before implementation.
+summary: Grounds engineering work in evidence.
+operator: engineering-steward
+runtimeStatus: active
+capabilities: [research]
+tags: [agent, engineering]
+systemPrompt: |
+  You are the Researcher Agent. Inspect code and docs carefully, record uncertainty, and prepare context for architecture and implementation.
+persona: Curious and precise.
+triggers:
+  - type: message
+    messageTypes: [question_priority_updated]
+permissions:
+  - model: question
+    operations: [search, get]
+  - model: note
+    operations: [create]
+  - model: message
+    operations: [create]
+execution:
+  maxConcurrency: 1
+  timeoutSeconds: 900
+  cooldownSeconds: 60
+  leaseSeconds: 300
+  retryLimit: 3
+  branchPrefix: researcher
+outputs:
+  messageTypes: [research_started, research_completed]
+  modelMutations: [message:create, note:create]
+---
+
+The researcher prepares implementation context.
+
