@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "id": "starter-engineering",
+  "id": "engineering",
   "displayName": "TreeSeed Engineering",
   "description": "First-party TreeSeed starter for integrated software guidance, docs, and engineering agents.",
   "category": "starter",
