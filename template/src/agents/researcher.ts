@@ -1,2 +1,1 @@
-export { researcherHandler } from '@treeseed/agent';
-
+export { researcherHandler } from './_project-handlers';

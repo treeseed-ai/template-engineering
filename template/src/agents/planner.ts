@@ -1,2 +1,1 @@
-export { plannerHandler } from '@treeseed/agent';
-
+export { plannerHandler } from './_project-handlers';

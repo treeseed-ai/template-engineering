@@ -29,10 +29,16 @@ execution:
   leaseSeconds: 300
   retryLimit: 3
   branchPrefix: researcher
+  requiresApprovedWork: false
+  contextSource: treedx
+  contextFormat: mdx
+  contextInjection: rendered-file-content
+  audit:
+    capture: [prompt, context, response, toolLog, capacityEnvelope]
+    redact: [secrets, credentials]
 outputs:
   messageTypes: [research_started, research_completed]
   modelMutations: [message:create, note:create]
 ---
 
 The researcher prepares implementation context.
-

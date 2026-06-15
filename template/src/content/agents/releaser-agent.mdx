@@ -27,10 +27,16 @@ execution:
   leaseSeconds: 300
   retryLimit: 2
   branchPrefix: releaser
+  requiresApprovedWork: true
+  contextSource: treedx
+  contextFormat: mdx
+  contextInjection: rendered-file-content
+  audit:
+    capture: [prompt, context, response, toolLog, changedFiles, capacityEnvelope, treeDxVerification]
+    redact: [secrets, credentials]
 outputs:
   messageTypes: [release_started, release_completed, release_failed]
   modelMutations: [knowledge:create, message:create]
 ---
 
 The releaser records release-ready state.
-

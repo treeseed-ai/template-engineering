@@ -29,10 +29,16 @@ execution:
   leaseSeconds: 300
   retryLimit: 3
   branchPrefix: architect
+  requiresApprovedWork: true
+  contextSource: treedx
+  contextFormat: mdx
+  contextInjection: rendered-file-content
+  audit:
+    capture: [prompt, context, response, toolLog, changedFiles, capacityEnvelope, treeDxVerification]
+    redact: [secrets, credentials]
 outputs:
   messageTypes: [architecture_updated]
   modelMutations: [knowledge:create, message:create]
 ---
 
 The architect prepares implementation guidance.
-

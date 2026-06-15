@@ -29,10 +29,16 @@ execution:
   leaseSeconds: 300
   retryLimit: 2
   branchPrefix: reporter
+  requiresApprovedWork: false
+  contextSource: treedx
+  contextFormat: mdx
+  contextInjection: rendered-file-content
+  audit:
+    capture: [prompt, context, response, toolLog, capacityEnvelope]
+    redact: [secrets, credentials]
 outputs:
   messageTypes: [report_created]
   modelMutations: [message:create]
 ---
 
 The reporter keeps engineering state legible.
-

@@ -1,2 +1,1 @@
-export { reviewerHandler } from '@treeseed/agent';
-
+export { reviewerHandler } from './_project-handlers';

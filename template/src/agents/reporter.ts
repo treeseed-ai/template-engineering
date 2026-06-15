@@ -1,2 +1,1 @@
-export { reporterHandler } from '@treeseed/agent';
-
+export { reporterHandler } from './_project-handlers';

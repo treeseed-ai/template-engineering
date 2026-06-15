@@ -25,10 +25,16 @@ execution:
   leaseSeconds: 300
   retryLimit: 2
   branchPrefix: reviewer
+  requiresApprovedWork: false
+  contextSource: treedx
+  contextFormat: mdx
+  contextInjection: rendered-file-content
+  audit:
+    capture: [prompt, context, response, toolLog, capacityEnvelope]
+    redact: [secrets, credentials]
 outputs:
   messageTypes: [task_verified, review_failed]
   modelMutations: [message:create]
 ---
 
 The reviewer turns implementation output into release readiness.
-

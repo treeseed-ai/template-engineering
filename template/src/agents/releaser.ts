@@ -1,2 +1,1 @@
-export { releaserHandler } from '@treeseed/agent';
-
+export { releaserHandler } from './_project-handlers';

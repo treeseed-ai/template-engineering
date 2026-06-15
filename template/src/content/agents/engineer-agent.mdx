@@ -23,8 +23,15 @@ permissions:
 execution:
   provider: codex
   sandboxMode: workspace_write
-  allowedPaths: ["**"]
-  forbiddenPaths: [".git/**", ".agent-worktrees/**", ".treeseed/secrets/**", "node_modules/**", "docs/.treeseed/secrets/**"]
+  allowedPaths: ["src/**", "docs/**", "tests/**", "README.md", "package.json", "package-lock.json", "*.config.*"]
+  forbiddenPaths: [".git/**", ".agent-worktrees/**", ".treeseed/secrets/**", ".env", ".env.*", "**/.env", "**/.env.*", "**/*secret*", "**/*.pem", "**/*.key", "node_modules/**", "dist/**", "build/**", "coverage/**", "docs/.treeseed/secrets/**"]
+  requiresApprovedWork: true
+  contextSource: treedx
+  contextFormat: mdx
+  contextInjection: rendered-file-content
+  audit:
+    capture: [prompt, context, response, toolLog, changedFiles, capacityEnvelope, treeDxVerification]
+    redact: [secrets, credentials]
   maxConcurrency: 1
   timeoutSeconds: 1200
   cooldownSeconds: 60
@@ -37,4 +44,3 @@ outputs:
 ---
 
 The engineer operates against the software root while the TreeSeed project remains the guidance layer.
-
