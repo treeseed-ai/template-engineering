@@ -1,7 +1,12 @@
 ---
 name: Reporter Agent
 slug: reporter-agent
-handler: reporter
+handler: report
+projectAgentClassId: reporting
+projectAgentClassSlug: reporting
+handlerConfig:
+  workPackageKind: report
+  domain: project_report
 enabled: true
 description: Summarizes engineering progress, open risks, and release readiness.
 summary: Keeps the software guidance loop visible.
@@ -21,8 +26,34 @@ permissions:
   - model: knowledge
     operations: [search, get]
   - model: message
-    operations: [create]
+    operations: [create, pick, update]
+context:
+  queries:
+    - id: reporter-agent-treedx-context
+      purpose: plan
+      query: workday progress completed tasks open risks approvals artifacts release readiness
+      scope: /
+      codeScopes:
+        - src/content
+        - docs
+      relations:
+        - references
+        - related
+      depth: 2
+      budget: 12
+      format: summary
 execution:
+  provider: codex
+  model: gpt-5.5
+  approvalPolicy: never
+  sandboxMode: read_only
+  reasoningEffort: medium
+  providerProfile:
+    requiredCapabilities:
+      - reasoning
+      - treedx_context
+      - reporting
+    fallbackPolicy: require_same_model_class
   maxConcurrency: 1
   timeoutSeconds: 600
   cooldownSeconds: 60
@@ -39,6 +70,11 @@ execution:
 outputs:
   messageTypes: [report_created]
   modelMutations: [message:create]
+governance:
+  mutationClass: report_only
+  approvalRequiredForCanonicalContent: true
+  approvalRequiredForCode: false
+  requireHumanApproval: false
 ---
 
 The reporter keeps engineering state legible.

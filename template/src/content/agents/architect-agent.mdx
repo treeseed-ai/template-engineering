@@ -1,7 +1,12 @@
 ---
 name: Architect Agent
 slug: architect-agent
-handler: architect
+handler: plan
+projectAgentClassId: architecture
+projectAgentClassSlug: architecture
+handlerConfig:
+  workPackageKind: plan
+  domain: architecture_guidance
 enabled: true
 description: Turns objectives into architecture guidance.
 summary: Creates implementation-ready design context.
@@ -21,8 +26,35 @@ permissions:
   - model: knowledge
     operations: [create]
   - model: message
-    operations: [create]
+    operations: [create, pick, update]
+context:
+  queries:
+    - id: architect-agent-treedx-context
+      purpose: plan
+      query: objective architecture guidance boundaries implementation verification expectations
+      scope: /
+      codeScopes:
+        - src/content
+        - docs
+      relations:
+        - references
+        - related
+      depth: 2
+      budget: 12
+      format: summary
 execution:
+  provider: codex
+  model: gpt-5.5
+  approvalPolicy: never
+  sandboxMode: read_only
+  reasoningEffort: medium
+  providerProfile:
+    requiredCapabilities:
+      - reasoning
+      - treedx_context
+      - architecture
+      - repo_read
+    fallbackPolicy: require_same_model_class
   maxConcurrency: 1
   timeoutSeconds: 900
   cooldownSeconds: 60
@@ -39,6 +71,11 @@ execution:
 outputs:
   messageTypes: [architecture_updated]
   modelMutations: [knowledge:create, message:create]
+governance:
+  mutationClass: architecture_guidance
+  approvalRequiredForCanonicalContent: true
+  approvalRequiredForCode: false
+  requireHumanApproval: false
 ---
 
 The architect prepares implementation guidance.

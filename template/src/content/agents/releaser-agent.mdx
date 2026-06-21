@@ -1,7 +1,12 @@
 ---
 name: Releaser Agent
 slug: releaser-agent
-handler: releaser
+handler: report
+projectAgentClassId: release
+projectAgentClassSlug: release
+handlerConfig:
+  workPackageKind: report
+  domain: release_readiness
 enabled: true
 description: Prepares verified work for release.
 summary: Creates release knowledge and handoff messages.
@@ -19,8 +24,35 @@ permissions:
   - model: knowledge
     operations: [create]
   - model: message
-    operations: [create]
+    operations: [create, pick, update]
+context:
+  queries:
+    - id: releaser-agent-treedx-context
+      purpose: release
+      query: task verified release readiness approvals verification summary handoff
+      scope: /
+      codeScopes:
+        - src/content
+        - docs
+      relations:
+        - references
+        - related
+      depth: 2
+      budget: 12
+      format: summary
 execution:
+  provider: codex
+  model: gpt-5.5
+  approvalPolicy: never
+  sandboxMode: read_only
+  reasoningEffort: medium
+  providerProfile:
+    requiredCapabilities:
+      - reasoning
+      - treedx_context
+      - release_readiness
+      - human_review
+    fallbackPolicy: ask_for_approval
   maxConcurrency: 1
   timeoutSeconds: 900
   cooldownSeconds: 60
@@ -37,6 +69,11 @@ execution:
 outputs:
   messageTypes: [release_started, release_completed, release_failed]
   modelMutations: [knowledge:create, message:create]
+governance:
+  mutationClass: release_readiness_only
+  approvalRequiredForCanonicalContent: true
+  approvalRequiredForCode: false
+  requireHumanApproval: true
 ---
 
 The releaser records release-ready state.

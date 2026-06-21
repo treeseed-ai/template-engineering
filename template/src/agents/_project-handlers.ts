@@ -18,7 +18,11 @@ function completed(summary: string, metadata: Record<string, unknown> = {}): Age
   return { status: 'completed', summary, metadata };
 }
 
-function createSecureHandler(kind: string, messageType: string, verb: string): AgentHandler<Inputs, Result> {
+function firstOutputMessage(context: Parameters<AgentHandler<Inputs, Result>['resolveInputs']>[0], fallback: string) {
+	return context.agent.outputs.messageTypes[0] ?? fallback;
+}
+
+function createSecureHandler(kind: string, fallbackMessageType: string, verb: string): AgentHandler<Inputs, Result> {
   return {
     kind,
     async resolveInputs(context) {
@@ -31,13 +35,14 @@ function createSecureHandler(kind: string, messageType: string, verb: string): A
       const objective = inputs.objective ?? 'No approved engineering objective was available.';
       return {
         ...inputs,
-        messageType,
+        messageType: fallbackMessageType,
         summary: `${verb} for objective: ${objective}`,
       };
     },
     async emitOutputs(context, result) {
+      const messageType = firstOutputMessage(context, result.messageType);
       await context.sdk.createMessage({
-        type: result.messageType,
+        type: messageType,
         payload: {
           objective: result.objective,
           triggerKind: result.triggerKind,
@@ -60,10 +65,8 @@ function createSecureHandler(kind: string, messageType: string, verb: string): A
   };
 }
 
-export const plannerHandler = createSecureHandler('planner', 'objective_priority_updated', 'Prepared delivery planning proposal');
-export const researcherHandler = createSecureHandler('researcher', 'research_completed', 'Prepared implementation research proposal');
-export const architectHandler = createSecureHandler('architect', 'architecture_updated', 'Prepared architecture guidance proposal');
-export const engineerHandler = createSecureHandler('engineer', 'task_waiting', 'Prepared implementation plan awaiting approval');
-export const reviewerHandler = createSecureHandler('reviewer', 'task_verified', 'Prepared verification review');
-export const releaserHandler = createSecureHandler('releaser', 'release_started', 'Prepared release handoff proposal');
-export const reporterHandler = createSecureHandler('reporter', 'report_created', 'Prepared engineering progress report');
+export const planHandler = createSecureHandler('plan', 'objective_priority_updated', 'Prepared planning proposal');
+export const researchHandler = createSecureHandler('research', 'research_completed', 'Prepared research proposal');
+export const actHandler = createSecureHandler('act', 'task_waiting', 'Prepared implementation plan awaiting approval');
+export const reviewHandler = createSecureHandler('review', 'task_verified', 'Prepared verification review');
+export const reportHandler = createSecureHandler('report', 'report_created', 'Prepared report');

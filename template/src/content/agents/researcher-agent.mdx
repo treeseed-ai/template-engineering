@@ -1,7 +1,12 @@
 ---
 name: Researcher Agent
 slug: researcher-agent
-handler: researcher
+handler: research
+projectAgentClassId: research
+projectAgentClassSlug: research
+handlerConfig:
+  workPackageKind: research
+  domain: research
 enabled: true
 description: Researches codebase and product questions before implementation.
 summary: Grounds engineering work in evidence.
@@ -21,8 +26,35 @@ permissions:
   - model: note
     operations: [create]
   - model: message
-    operations: [create]
+    operations: [create, pick, update]
+context:
+  queries:
+    - id: researcher-agent-treedx-context
+      purpose: research
+      query: prioritized question source evidence notes uncertainty knowledge gaps
+      scope: /
+      codeScopes:
+        - src/content
+        - docs
+      relations:
+        - references
+        - related
+      depth: 2
+      budget: 12
+      format: summary
 execution:
+  provider: codex
+  model: gpt-5.5
+  approvalPolicy: never
+  sandboxMode: read_only
+  reasoningEffort: medium
+  providerProfile:
+    requiredCapabilities:
+      - reasoning
+      - treedx_context
+      - research
+      - repo_read
+    fallbackPolicy: require_same_model_class
   maxConcurrency: 1
   timeoutSeconds: 900
   cooldownSeconds: 60
@@ -39,6 +71,11 @@ execution:
 outputs:
   messageTypes: [research_started, research_completed]
   modelMutations: [message:create, note:create]
+governance:
+  mutationClass: research_only
+  approvalRequiredForCanonicalContent: true
+  approvalRequiredForCode: false
+  requireHumanApproval: false
 ---
 
 The researcher prepares implementation context.

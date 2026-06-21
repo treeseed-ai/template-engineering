@@ -1,7 +1,12 @@
 ---
 name: Planner Agent
 slug: planner-agent
-handler: planner
+handler: plan
+projectAgentClassId: planning
+projectAgentClassSlug: planning
+handlerConfig:
+  workPackageKind: plan
+  domain: planning
 enabled: true
 description: Prioritizes engineering objectives and research questions.
 summary: Keeps the delivery loop focused.
@@ -21,8 +26,35 @@ permissions:
   - model: objective
     operations: [search, get]
   - model: message
-    operations: [create]
+    operations: [create, pick, update]
+context:
+  queries:
+    - id: planner-agent-treedx-context
+      purpose: plan
+      query: project objectives open questions decisions backlog agent capacity priorities
+      scope: /
+      codeScopes:
+        - src/content
+        - docs
+      relations:
+        - references
+        - related
+      depth: 2
+      budget: 12
+      format: summary
 execution:
+  provider: codex
+  model: gpt-5.5
+  approvalPolicy: never
+  sandboxMode: read_only
+  reasoningEffort: medium
+  providerProfile:
+    requiredCapabilities:
+      - reasoning
+      - treedx_context
+      - planning
+      - repo_read
+    fallbackPolicy: require_same_model_class
   maxConcurrency: 1
   timeoutSeconds: 600
   cooldownSeconds: 60
@@ -39,6 +71,11 @@ execution:
 outputs:
   messageTypes: [question_priority_updated, objective_priority_updated]
   modelMutations: [message:create]
+governance:
+  mutationClass: planning_only
+  approvalRequiredForCanonicalContent: true
+  approvalRequiredForCode: false
+  requireHumanApproval: false
 ---
 
 The planner chooses the next engineering target.

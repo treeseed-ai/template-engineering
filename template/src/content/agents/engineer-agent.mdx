@@ -1,7 +1,12 @@
 ---
 name: Engineer Agent
 slug: engineer-agent
-handler: engineer
+handler: act
+projectAgentClassId: implementation
+projectAgentClassSlug: implementation
+handlerConfig:
+  workPackageKind: act
+  domain: implementation
 enabled: true
 description: Implements approved architecture guidance in the parent software repo.
 summary: Runs from the configured project root and keeps changes reviewable.
@@ -19,10 +24,28 @@ permissions:
   - model: knowledge
     operations: [search, get]
   - model: message
-    operations: [create]
+    operations: [create, pick, update]
+context:
+  queries:
+    - id: engineer-agent-treedx-context
+      purpose: implement
+      query: approved architecture guidance task context changed paths verification repository constraints
+      scope: /
+      codeScopes:
+        - src/content
+        - docs
+      relations:
+        - references
+        - related
+      depth: 2
+      budget: 12
+      format: summary
 execution:
   provider: codex
+  model: gpt-5.5
+  approvalPolicy: never
   sandboxMode: workspace_write
+  reasoningEffort: medium
   allowedPaths: ["src/**", "docs/**", "tests/**", "README.md", "package.json", "package-lock.json", "*.config.*"]
   forbiddenPaths: [".git/**", ".agent-worktrees/**", ".treeseed/secrets/**", ".env", ".env.*", "**/.env", "**/.env.*", "**/*secret*", "**/*.pem", "**/*.key", "node_modules/**", "dist/**", "build/**", "coverage/**", "docs/.treeseed/secrets/**"]
   requiresApprovedWork: true
@@ -32,6 +55,15 @@ execution:
   audit:
     capture: [prompt, context, response, toolLog, changedFiles, capacityEnvelope, treeDxVerification]
     redact: [secrets, credentials]
+  providerProfile:
+    requiredCapabilities:
+      - reasoning
+      - treedx_context
+      - repo_read
+      - repo_write
+      - shell
+      - test_runner
+    fallbackPolicy: fail_if_unavailable
   maxConcurrency: 1
   timeoutSeconds: 1200
   cooldownSeconds: 60
@@ -41,6 +73,11 @@ execution:
 outputs:
   messageTypes: [task_complete, task_waiting, task_failed]
   modelMutations: [message:create]
+governance:
+  mutationClass: approved_implementation
+  approvalRequiredForCanonicalContent: true
+  approvalRequiredForCode: true
+  requireHumanApproval: true
 ---
 
 The engineer operates against the software root while the TreeSeed project remains the guidance layer.

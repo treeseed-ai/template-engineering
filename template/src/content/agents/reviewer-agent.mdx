@@ -1,7 +1,12 @@
 ---
 name: Reviewer Agent
 slug: reviewer-agent
-handler: reviewer
+handler: review
+projectAgentClassId: review
+projectAgentClassSlug: review
+handlerConfig:
+  workPackageKind: review
+  domain: review
 enabled: true
 description: Reviews agent changes and verification output.
 summary: Protects the project from unreviewed implementation drift.
@@ -17,8 +22,35 @@ triggers:
     messageTypes: [task_complete]
 permissions:
   - model: message
-    operations: [create]
+    operations: [create, pick, update]
+context:
+  queries:
+    - id: reviewer-agent-treedx-context
+      purpose: review
+      query: task complete changed paths verification output architecture alignment release readiness
+      scope: /
+      codeScopes:
+        - src/content
+        - docs
+      relations:
+        - references
+        - related
+      depth: 2
+      budget: 12
+      format: summary
 execution:
+  provider: codex
+  model: gpt-5.5
+  approvalPolicy: never
+  sandboxMode: read_only
+  reasoningEffort: medium
+  providerProfile:
+    requiredCapabilities:
+      - reasoning
+      - treedx_context
+      - review
+      - repo_read
+    fallbackPolicy: require_same_model_class
   maxConcurrency: 1
   timeoutSeconds: 900
   cooldownSeconds: 60
@@ -35,6 +67,11 @@ execution:
 outputs:
   messageTypes: [task_verified, review_failed]
   modelMutations: [message:create]
+governance:
+  mutationClass: review_only
+  approvalRequiredForCanonicalContent: true
+  approvalRequiredForCode: false
+  requireHumanApproval: false
 ---
 
 The reviewer turns implementation output into release readiness.
