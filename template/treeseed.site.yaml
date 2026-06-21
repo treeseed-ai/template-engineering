@@ -12,8 +12,6 @@ hosting:
 cloudflare:
   accountId: replace-with-cloudflare-account-id
   workerName: __SITE_SLUG__
-  queueName: __SITE_SLUG__-agent-work
-  dlqName: __SITE_SLUG__-agent-work-dlq
   pages:
     projectName: __SITE_SLUG__
     previewProjectName: __SITE_SLUG__-staging
@@ -48,4 +46,3 @@ smtp:
   enabled: false
 turnstile:
   enabled: false
-
