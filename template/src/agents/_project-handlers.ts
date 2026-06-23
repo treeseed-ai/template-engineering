@@ -1,4 +1,4 @@
-import type { AgentHandler, AgentHandlerOutput } from '@treeseed/agent/runtime-types';
+import type { AgentHandler } from '@treeseed/agent/runtime-types';
 
 type Inputs = {
   objective: string | null;
@@ -9,6 +9,8 @@ type Result = Inputs & {
   summary: string;
   messageType: string;
 };
+
+type AgentHandlerOutput = Awaited<ReturnType<AgentHandler<Inputs, Result>['emitOutputs']>>;
 
 function objectiveText(context: Parameters<AgentHandler<Inputs, Result>['resolveInputs']>[0]) {
   return context.coreObjective?.content ?? context.coreObjective?.message ?? null;
