@@ -1,9 +1,12 @@
 site:
+  logo:
+    src: /logo.svg
+    alt: __SITE_NAME__ logo
   name: __SITE_NAME__
   statement: Guide software work with research, architecture, implementation, review, and release agents.
-  siteUrl: __SITE_URL__
-  githubRepository: __REPOSITORY_URL__
-  discordLink: __DISCORD_URL__
+  siteUrl: https://example.com
+  githubRepository: https://github.com/example/software
+  discordLink: https://discord.gg/example
   headerMenu:
     - label: Engineering
       items:
@@ -23,7 +26,13 @@ site:
     - label: Project
       items:
         - label: Repository
-          href: __REPOSITORY_URL__
+          href: https://github.com/example/software
+  emailNotifications:
+    contactRouting:
+      default:
+        - hello@example.com
+    subscribeRecipients:
+      - hello@example.com
   summary: __SITE_NAME__ is a TreeSeed engineering project for guiding software delivery.
   projectStage: Engineering starter
   projectStageDetail: Generated from the TreeSeed engineering starter template.
@@ -57,4 +66,3 @@ models:
     defaults:
       draft: false
       tags: []
-

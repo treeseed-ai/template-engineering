@@ -1,7 +1,7 @@
 name: __SITE_NAME__
 slug: __SITE_SLUG__
-siteUrl: __SITE_URL__
-contactEmail: __CONTACT_EMAIL__
+siteUrl: https://example.com
+contactEmail: hello@example.com
 projectRoot: ..
 hosting:
   kind: hosted_project
