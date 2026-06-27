@@ -25,6 +25,18 @@ permissions:
     operations: [create]
   - model: message
     operations: [create, pick, update]
+contentAccess:
+  read:
+    models: [question, proposal, decision, note, objective, knowledge]
+    actions: [describe, query, read]
+    books: ["*"]
+  write:
+    models: [proposal, note, knowledge]
+    actions: [create, update, link, validate]
+    books: ["*"]
+    relations: [proposal.related_questions, proposal.related_objectives, note.related_proposals, note.related_questions]
+  commit:
+    allowed: false
 context:
   queries:
     - id: releaser-agent-treedx-context
@@ -66,14 +78,26 @@ execution:
   audit:
     capture: [prompt, context, response, toolLog, changedFiles, capacityEnvelope, treeDxVerification]
     redact: [secrets, credentials]
+tools:
+  allowed:
+    - treedx.build_context
+    - treedx.read_repository_files
+    - treedx.search_workspace
+    - treedx.read_workspace_file
+    - treeseed.status
+    - treeseed.changed_paths
+    - treeseed.verify
+    - treeseed.content.query
+    - treeseed.content.read
+    - treeseed.proposals.create
+    - treeseed.notes.create
+    - treeseed.knowledge.create
+    - treeseed.content.link_note
 outputs:
   messageTypes: [release_started, release_completed, release_failed]
   modelMutations: [knowledge:create, message:create]
 governance:
   mutationClass: release_readiness_only
-  approvalRequiredForCanonicalContent: true
-  approvalRequiredForCode: false
-  requireHumanApproval: true
 ---
 
 The releaser records release-ready state.

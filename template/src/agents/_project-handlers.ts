@@ -50,7 +50,7 @@ function createSecureHandler(kind: string, fallbackMessageType: string, verb: st
           triggerKind: result.triggerKind,
           handler: kind,
           runId: context.runId,
-          approvalRequiredForMutation: true,
+          decisionRequiredForMutation: true,
           allowedWriteRoots: ['src/**', 'docs/**', 'tests/**', 'README.md', 'package.json', 'package-lock.json'],
           contextSource: 'treedx-rendered-mdx',
         },
@@ -58,7 +58,7 @@ function createSecureHandler(kind: string, fallbackMessageType: string, verb: st
       return {
         ...completed(result.summary, {
           projectOwnedHandler: true,
-          approvalRequiredForMutation: true,
+          decisionRequiredForMutation: true,
           contextSource: 'treedx-rendered-mdx',
         }),
         status: result.objective ? 'completed' : 'waiting',
