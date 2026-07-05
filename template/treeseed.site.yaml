@@ -26,7 +26,7 @@ surfaces:
     publicBaseUrl: https://__SITE_SLUG__.pages.dev
     localBaseUrl: http://127.0.0.1:4321
 plugins:
-  - package: '@treeseed/core/plugin-default'
+  - package: '@treeseed/sdk/plugin-default'
 providers:
   forms: store_only
   agents:
