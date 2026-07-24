@@ -1,3 +1,3 @@
-import { createTreeseedTenantSite } from '@treeseed/core/config';
+import { createTenantSite } from '@treeseed/core/config';
 
-export default createTreeseedTenantSite();
+export default createTenantSite();

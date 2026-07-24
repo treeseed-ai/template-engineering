@@ -1,4 +1,3 @@
-import { createTreeseedNodeServer } from '@treeseed/agent/api';
+import { createNodeServer } from '@treeseed/agent/api';
 
-createTreeseedNodeServer();
-
+createNodeServer();
