@@ -4,81 +4,81 @@
   "displayName": "TreeSeed Engineering",
   "description": "First-party TreeSeed starter for integrated software guidance, docs, and engineering agents.",
   "category": "starter",
-  "tags": ["starter", "engineering", "software", "agents", "docs"],
+  "tags": [
+    "starter",
+    "engineering",
+    "software",
+    "agents",
+    "docs"
+  ],
   "templateVersion": "1.0.0",
   "templateApiVersion": 1,
   "minCliVersion": "0.1.1",
   "minCoreVersion": "0.1.2",
   "variables": [
-    { "name": "Site name", "token": "__SITE_NAME__", "deriveFrom": "name", "required": true },
-    { "name": "Site slug", "token": "__SITE_SLUG__", "deriveFrom": "slug", "required": true },
-    { "name": "Site URL", "token": "__SITE_URL__", "deriveFrom": "siteUrl", "default": "https://example.com", "required": true },
-    { "name": "Contact email", "token": "__CONTACT_EMAIL__", "deriveFrom": "contactEmail", "default": "hello@example.com", "required": true },
-    { "name": "Repository URL", "token": "__REPOSITORY_URL__", "deriveFrom": "repositoryUrl", "default": "https://github.com/example/software" },
-    { "name": "Discord URL", "token": "__DISCORD_URL__", "deriveFrom": "discordUrl", "default": "https://discord.gg/example" },
-    { "name": "CLI version", "token": "__CLI_VERSION__", "deriveFrom": "cliVersion", "required": true },
-    { "name": "Core version", "token": "__CORE_VERSION__", "deriveFrom": "coreVersion", "required": true },
-    { "name": "Agent version", "token": "__AGENT_VERSION__", "deriveFrom": "agentVersion", "required": true },
-    { "name": "SDK version", "token": "__SDK_VERSION__", "deriveFrom": "sdkVersion", "required": true }
+    {
+      "name": "Site name",
+      "token": "__SITE_NAME__",
+      "deriveFrom": "name",
+      "required": true
+    },
+    {
+      "name": "Site slug",
+      "token": "__SITE_SLUG__",
+      "deriveFrom": "slug",
+      "required": true
+    },
+    {
+      "name": "Site URL",
+      "token": "__SITE_URL__",
+      "deriveFrom": "siteUrl",
+      "default": "https://example.com",
+      "required": true
+    },
+    {
+      "name": "Contact email",
+      "token": "__CONTACT_EMAIL__",
+      "deriveFrom": "contactEmail",
+      "default": "hello@example.com",
+      "required": true
+    },
+    {
+      "name": "Repository URL",
+      "token": "__REPOSITORY_URL__",
+      "deriveFrom": "repositoryUrl",
+      "default": "https://github.com/example/software"
+    },
+    {
+      "name": "Discord URL",
+      "token": "__DISCORD_URL__",
+      "deriveFrom": "discordUrl",
+      "default": "https://discord.gg/example"
+    },
+    {
+      "name": "CLI version",
+      "token": "__CLI_VERSION__",
+      "deriveFrom": "cliVersion",
+      "required": true
+    },
+    {
+      "name": "Core version",
+      "token": "__CORE_VERSION__",
+      "deriveFrom": "coreVersion",
+      "required": true
+    },
+    {
+      "name": "Agent version",
+      "token": "__AGENT_VERSION__",
+      "deriveFrom": "agentVersion",
+      "required": true
+    },
+    {
+      "name": "SDK version",
+      "token": "__SDK_VERSION__",
+      "deriveFrom": "sdkVersion",
+      "required": true
+    }
   ],
-  "launchRequirements": {
-    "version": 1,
-    "hosts": [
-      {
-        "kind": "host",
-        "key": "sourceRepository",
-        "type": "repository",
-        "required": true,
-        "compatibleProviders": ["github"],
-        "displayName": "Source repository",
-        "purpose": "Create and push the generated engineering project repository.",
-        "defaultSelection": "team-default",
-        "configWrites": [
-          { "target": "treeseed.site.yaml", "path": "hosting.hostBindings.sourceRepository.provider", "valueFrom": "selectedHost.provider" },
-          { "target": "treeseed.site.yaml", "path": "hosting.hostBindings.sourceRepository.owner", "valueFrom": "selectedHost.github.owner" },
-          { "target": "treeseed.site.yaml", "path": "hosting.hostBindings.sourceRepository.repository", "valueFrom": "derived.repositoryName" }
-        ],
-        "environmentWrites": [
-          { "env": "GITHUB_TOKEN", "valueFrom": "selectedHost.token", "targets": ["github-secret"], "scopes": ["staging", "prod"], "sensitivity": "secret" }
-        ]
-      },
-      {
-        "kind": "host",
-        "key": "publicWeb",
-        "type": "web",
-        "required": true,
-        "compatibleProviders": ["cloudflare"],
-        "displayName": "Public web host",
-        "purpose": "Deploy the engineering site, previews, content storage, and web runtime resources.",
-        "defaultSelection": "managed",
-        "configWrites": [
-          { "target": "treeseed.site.yaml", "path": "hosting.hostBindings.publicWeb.provider", "valueFrom": "selectedHost.provider" },
-          { "target": "treeseed.site.yaml", "path": "surfaces.web.provider", "valueFrom": "selectedHost.provider" },
-          { "target": "treeseed.site.yaml", "path": "surfaces.web.environments.prod.domain", "valueFrom": "launchInput.domains.productionDomain", "writeWhen": "host-selected" },
-          { "target": "treeseed.site.yaml", "path": "surfaces.web.environments.staging.domain", "valueFrom": "launchInput.domains.stagingDomain", "writeWhen": "host-selected" }
-        ],
-        "environmentWrites": [
-          { "env": "TREESEED_PUBLIC_WEB_PROVIDER", "valueFrom": "selectedHost.provider", "targets": ["github-variable", "cloudflare-var"], "scopes": ["staging", "prod"], "sensitivity": "plain" }
-        ]
-      },
-      {
-        "kind": "host",
-        "key": "transactionalEmail",
-        "type": "email",
-        "required": false,
-        "compatibleProviders": ["smtp"],
-        "displayName": "Transactional email",
-        "purpose": "Send form, account, and engineering project notification email.",
-        "defaultSelection": "managed",
-        "configWrites": [
-          { "target": "treeseed.site.yaml", "path": "hosting.hostBindings.transactionalEmail.provider", "valueFrom": "selectedHost.provider", "writeWhen": "host-selected" }
-        ],
-        "environmentWrites": [
-          { "env": "SMTP_HOST", "valueFrom": "selectedHost.smtpHost", "targets": ["github-secret", "railway-secret"], "scopes": ["staging", "prod"], "sensitivity": "secret" }
-        ]
-      }
-    ]
-  },
   "managedSurface": {
     "coreManaged": [
       "package.json",
@@ -91,7 +91,12 @@
       "src/manifest.yaml",
       "src/env.yaml"
     ],
-    "validatedOnly": ["treeseed.site.yaml", "src/config.yaml", "src/manifest.yaml", "src/env.yaml"]
+    "validatedOnly": [
+      "treeseed.site.yaml",
+      "src/config.yaml",
+      "src/manifest.yaml",
+      "src/env.yaml"
+    ]
   },
   "testing": {
     "buildCommand": "npm run build"
