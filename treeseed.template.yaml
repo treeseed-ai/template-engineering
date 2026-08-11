@@ -1,11 +1,11 @@
 id: engineering
 name: TreeSeed Engineering
 category: starter
-repository: treeseed-templates/engineering
+repository: treeseed-ai/template-engineering
 versionSource: template.config.json
 verify:
   local: npm --prefix template run verify
   release: npm --prefix template run verify
 release:
   tagPrefix: template/
-  recordPath: .treeseed/templates/engineering/latest-release.json
+  recordPath: .treeseed/starters/engineering/latest-release.json
