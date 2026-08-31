@@ -14,8 +14,8 @@
     "preflight": "treeseed preflight",
     "dev": "treeseed dev",
     "capacity": "treeseed capacity",
-    "check": "treeseed check",
-    "build:web": "treeseed build",
+    "check": "astro check",
+    "build:web": "astro build",
     "build": "npm run build:web",
     "deploy": "treeseed release",
     "preview": "treeseed preview",
@@ -34,4 +34,3 @@
     "typescript": "^5.9.3"
   }
 }
-
