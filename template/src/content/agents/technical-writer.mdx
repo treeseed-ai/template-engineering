@@ -48,6 +48,12 @@ activityProfiles:
       kind: staging-content
       base: staging
     permissions:
+      repository:
+        readPaths:
+          - template/**
+        writePaths:
+          - template/docs/**
+        allowCodeMutation: true
       content:
         question:
           operations:
@@ -512,14 +518,6 @@ activityProfiles:
       maxRuntimeSeconds: 1800
       maxRetries: 2
       verificationRequired: false
-      allowedPaths:
-        - template/docs/**
-      forbiddenPaths:
-        - template/src/**
-        - template/test/**
-        - template/tests/**
-        - template/spec/**
-        - template/specs/**
 ---
 
 Technical Writer for the market TreeSeed project.

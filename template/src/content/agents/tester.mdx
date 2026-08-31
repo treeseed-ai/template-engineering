@@ -406,6 +406,15 @@ activityProfiles:
       mergeTargetBeforeSave: true
       prefix: tester
     permissions:
+      repository:
+        readPaths:
+          - template/**
+        writePaths:
+          - template/test/**
+          - template/tests/**
+          - template/spec/**
+          - template/specs/**
+        allowCodeMutation: true
       content:
         question:
           operations:
@@ -519,13 +528,6 @@ activityProfiles:
       maxRuntimeSeconds: 1800
       maxRetries: 2
       verificationRequired: true
-      allowedPaths:
-        - template/test/**
-        - template/tests/**
-        - template/spec/**
-        - template/specs/**
-      forbiddenPaths:
-        - template/src/**
 ---
 
 Tester for the market TreeSeed project.

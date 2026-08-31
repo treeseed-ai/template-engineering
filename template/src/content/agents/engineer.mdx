@@ -406,6 +406,12 @@ activityProfiles:
       mergeTargetBeforeSave: true
       prefix: engineer
     permissions:
+      repository:
+        readPaths:
+          - template/**
+        writePaths:
+          - template/src/**
+        allowCodeMutation: true
       content:
         question:
           operations:
@@ -519,13 +525,6 @@ activityProfiles:
       maxRuntimeSeconds: 1800
       maxRetries: 2
       verificationRequired: true
-      allowedPaths:
-        - template/src/**
-      forbiddenPaths:
-        - template/test/**
-        - template/tests/**
-        - template/spec/**
-        - template/specs/**
 ---
 
 Engineer for the market TreeSeed project.
