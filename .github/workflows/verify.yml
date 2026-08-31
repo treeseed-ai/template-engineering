@@ -17,6 +17,14 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 24
+      - name: Resolve template package versions
+        working-directory: template
+        run: |
+          npm pkg set name=treeseed-template-ci
+          npm pkg set "dependencies.@treeseed/agent=$(npm view @treeseed/agent dist-tags.rc)"
+          npm pkg set "dependencies.@treeseed/cli=$(npm view @treeseed/cli dist-tags.rc)"
+          npm pkg set "dependencies.@treeseed/core=$(npm view @treeseed/core dist-tags.next)"
+          npm pkg set "dependencies.@treeseed/sdk=$(npm view @treeseed/sdk dist-tags.rc)"
       - name: Verify generated project
         working-directory: template
         run: npm install --ignore-scripts && npm run verify
