@@ -48,6 +48,12 @@ activityProfiles:
       kind: staging-content
       base: staging
     permissions:
+      repository:
+        readPaths:
+          - template/**
+        writePaths:
+          - template/docs/**
+        allowCodeMutation: true
       content:
         question:
           operations:
@@ -150,9 +156,11 @@ activityProfiles:
       blockExecutionWhenCreated: true
       defaultAnswerPolicy:
         kind: human-or-agent
+    capabilityRequirements:
+      - capabilityId: treeseed.coordination.planning
+        versionRange: ^1.0.0
+        requirement: required
     execution:
-      requiredCapabilities:
-        - agent-execution
       maxRuntimeSeconds: 1800
       maxRetries: 2
       verificationRequired: false
@@ -264,9 +272,11 @@ activityProfiles:
       blockExecutionWhenCreated: true
       defaultAnswerPolicy:
         kind: human-or-agent
+    capabilityRequirements:
+      - capabilityId: treeseed.coordination.estimation
+        versionRange: ^1.0.0
+        requirement: required
     execution:
-      requiredCapabilities:
-        - agent-execution
       maxRuntimeSeconds: 1800
       maxRetries: 2
       verificationRequired: false
@@ -376,9 +386,11 @@ activityProfiles:
       blockExecutionWhenCreated: true
       defaultAnswerPolicy:
         kind: human-or-agent
+    capabilityRequirements:
+      - capabilityId: treeseed.engineering.review
+        versionRange: ^1.0.0
+        requirement: required
     execution:
-      requiredCapabilities:
-        - agent-execution
       maxRuntimeSeconds: 1800
       maxRetries: 2
       verificationRequired: false
@@ -498,20 +510,14 @@ activityProfiles:
       blockExecutionWhenCreated: true
       defaultAnswerPolicy:
         kind: human-or-agent
+    capabilityRequirements:
+      - capabilityId: treeseed.engineering.code-change
+        versionRange: ^1.0.0
+        requirement: required
     execution:
-      requiredCapabilities:
-        - agent-execution
       maxRuntimeSeconds: 1800
       maxRetries: 2
       verificationRequired: false
-      allowedPaths:
-        - template/docs/**
-      forbiddenPaths:
-        - template/src/**
-        - template/test/**
-        - template/tests/**
-        - template/spec/**
-        - template/specs/**
 ---
 
 Technical Writer for the market TreeSeed project.
