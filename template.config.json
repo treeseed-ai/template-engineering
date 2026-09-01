@@ -11,7 +11,7 @@
     "agents",
     "docs"
   ],
-  "templateVersion": "1.0.0-rc.4",
+  "templateVersion": "1.0.0-rc.5",
   "templateApiVersion": 1,
   "projectKind": "application",
   "platformProfile": "engineering",
