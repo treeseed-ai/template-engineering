@@ -11,8 +11,14 @@
     "agents",
     "docs"
   ],
-  "templateVersion": "1.0.0",
+  "templateVersion": "1.0.0-rc.1",
   "templateApiVersion": 1,
+  "projectKind": "application",
+  "platformProfile": "engineering",
+  "repositoryVisibility": [
+    "public",
+    "private"
+  ],
   "minCliVersion": "0.1.1",
   "minCoreVersion": "0.1.2",
   "variables": [
@@ -53,32 +59,14 @@
       "token": "__DISCORD_URL__",
       "deriveFrom": "discordUrl",
       "default": "https://discord.gg/example"
-    },
-    {
-      "name": "CLI version",
-      "token": "__CLI_VERSION__",
-      "deriveFrom": "cliVersion",
-      "required": true
-    },
-    {
-      "name": "Core version",
-      "token": "__CORE_VERSION__",
-      "deriveFrom": "coreVersion",
-      "required": true
-    },
-    {
-      "name": "Agent version",
-      "token": "__AGENT_VERSION__",
-      "deriveFrom": "agentVersion",
-      "required": true
-    },
-    {
-      "name": "SDK version",
-      "token": "__SDK_VERSION__",
-      "deriveFrom": "sdkVersion",
-      "required": true
     }
   ],
+  "dependencyRelease": {
+    "agent": "0.13.0-rc.41",
+    "cli": "0.13.0-rc.45",
+    "core": "0.12.60-rc.8",
+    "sdk": "0.13.0-rc.67"
+  },
   "managedSurface": {
     "coreManaged": [
       "package.json",

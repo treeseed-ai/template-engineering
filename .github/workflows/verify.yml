@@ -11,20 +11,36 @@ permissions:
 
 jobs:
   verify:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
           node-version: 24
-      - name: Resolve template package versions
-        working-directory: template
+          cache: npm
+          cache-dependency-path: template/package-lock.json
+      - name: Verify immutable template contract
         run: |
-          npm pkg set name=treeseed-template-ci
-          npm pkg set "dependencies.@treeseed/agent=$(npm view @treeseed/agent dist-tags.rc)"
-          npm pkg set "dependencies.@treeseed/cli=$(npm view @treeseed/cli dist-tags.rc)"
-          npm pkg set "dependencies.@treeseed/core=$(npm view @treeseed/core dist-tags.next)"
-          npm pkg set "dependencies.@treeseed/sdk=$(npm view @treeseed/sdk dist-tags.rc)"
+          node <<'NODE'
+          const fs = require('node:fs');
+          const crypto = require('node:crypto');
+          const child = require('node:child_process');
+          const contract = JSON.parse(fs.readFileSync('template.contract.json', 'utf8'));
+          const config = JSON.parse(fs.readFileSync(contract.configuration, 'utf8'));
+          const pkg = JSON.parse(fs.readFileSync(`${contract.templateRoot}/package.json`, 'utf8'));
+          if (contract.schemaVersion !== 'treeseed.project-template-contract/v1') throw new Error('Unexpected template contract schema.');
+          if (contract.id !== config.id || contract.version !== config.templateVersion || contract.projectKind !== config.projectKind || contract.platformProfile !== config.platformProfile) throw new Error('Template contract/config identity drift.');
+          for (const [name, version] of Object.entries(contract.dependencies)) if (pkg.dependencies[name] !== version) throw new Error(`Dependency drift for ${name}.`);
+          for (const value of Object.values(pkg.dependencies)) if (/^[~^]|latest|next|\*/u.test(value)) throw new Error(`Moving dependency selector ${value}.`);
+          const tracked = child.execFileSync('git', ['ls-files', '-z']).toString().split('\0').filter(Boolean);
+          const unixHome = Buffer.from(['', 'home', ''].join('/'));
+          const windowsHome = Buffer.from(['C:', 'Users', ''].join('\\'));
+          for (const file of tracked) {
+            const source = fs.readFileSync(file);
+            if (source.includes(unixHome) || source.includes(windowsHome)) throw new Error(`Personal path in ${file}.`);
+          }
+          process.stdout.write(`${crypto.createHash('sha256').update(JSON.stringify(contract)).digest('hex')}\n`);
+          NODE
       - name: Verify generated project
         working-directory: template
-        run: npm install --ignore-scripts && npm run verify
+        run: npm ci --ignore-scripts --no-audit --no-fund && npm run verify
