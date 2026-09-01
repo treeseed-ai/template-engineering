@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "treeseed.project-template-contract/v1",
+  "id": "engineering",
+  "version": "1.0.0-rc.1",
+  "category": "starter",
+  "projectKind": "application",
+  "platformProfile": "engineering",
+  "templateRoot": "template",
+  "configuration": "template.config.json",
+  "repository": "treeseed-ai/template-engineering",
+  "repositoryVisibility": ["public", "private"],
+  "library": {
+    "required": true,
+    "provider": "treedx",
+    "contentRoot": "src/content"
+  },
+  "inventory": {
+    "materializationPath": "packages/{slug}",
+    "sourceAuthority": "control-plane"
+  },
+  "dependencies": {
+    "@treeseed/agent": "0.13.0-rc.41",
+    "@treeseed/cli": "0.13.0-rc.45",
+    "@treeseed/core": "0.12.60-rc.8",
+    "@treeseed/sdk": "0.13.0-rc.67"
+  }
+}

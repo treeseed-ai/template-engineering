@@ -23,14 +23,14 @@
     "verify": "npm run check && npm run build"
   },
   "dependencies": {
-    "@treeseed/agent": "__AGENT_VERSION__",
-    "@treeseed/cli": "__CLI_VERSION__",
-    "@treeseed/core": "__CORE_VERSION__",
-    "@treeseed/sdk": "__SDK_VERSION__",
-    "yaml": "^2.8.1"
+    "@treeseed/agent": "0.13.0-rc.41",
+    "@treeseed/cli": "0.13.0-rc.45",
+    "@treeseed/core": "0.12.60-rc.8",
+    "@treeseed/sdk": "0.13.0-rc.67",
+    "yaml": "2.9.0"
   },
   "devDependencies": {
-    "@types/node": "^24.6.0",
-    "typescript": "^5.9.3"
+    "@types/node": "24.6.0",
+    "typescript": "5.9.3"
   }
 }
