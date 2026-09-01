@@ -21,7 +21,7 @@ jobs:
         run: |
           test "$(git cat-file -t "$GITHUB_REF")" = tag
           test "$(git describe --tags --exact-match HEAD)" = "$GITHUB_REF_NAME"
-          git fetch origin staging
+          git fetch origin staging:refs/remotes/origin/staging
           git merge-base --is-ancestor HEAD origin/staging
           test "$GITHUB_REF_NAME" = "template/$(node -p "require('./template.contract.json').version")"
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
