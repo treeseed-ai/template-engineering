@@ -1,11 +1,8 @@
 name: Publish protected engineering template
 
 on:
-  workflow_dispatch:
-    inputs:
-      tag:
-        description: Exact annotated template tag
-        required: true
+  push:
+    tags: ['template/*']
 
 permissions:
   contents: write
@@ -19,16 +16,14 @@ jobs:
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
-          ref: ${{ inputs.tag }}
           fetch-depth: 0
       - name: Require protected staging custody
         run: |
-          test "$GITHUB_WORKFLOW_REF" = "$GITHUB_REPOSITORY/.github/workflows/publish.yml@refs/heads/staging"
-          test "$(git cat-file -t "refs/tags/${{ inputs.tag }}")" = tag
-          test "$(git describe --tags --exact-match HEAD)" = "${{ inputs.tag }}"
+          test "$(git cat-file -t "$GITHUB_REF")" = tag
+          test "$(git describe --tags --exact-match HEAD)" = "$GITHUB_REF_NAME"
           git fetch origin staging
           git merge-base --is-ancestor HEAD origin/staging
-          test "${{ inputs.tag }}" = "template/$(node -p "require('./template.contract.json').version")"
+          test "$GITHUB_REF_NAME" = "template/$(node -p "require('./template.contract.json').version")"
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
           node-version: 24
@@ -45,11 +40,11 @@ jobs:
           contract_sha256="$(sha256sum template.contract.json | awk '{print $1}')"
           commit="$(git rev-parse HEAD)"
           version="$(node -p "require('./template.contract.json').version")"
-          node -e 'const fs=require("node:fs");const [commit,tag,version,artifact,contract]=process.argv.slice(1);fs.writeFileSync("release/out/template-release.json",JSON.stringify({schemaVersion:"treeseed.project-template-release/v1",id:"engineering",version,repository:"treeseed-ai/template-engineering",commit,tag,artifact:{url:`https://github.com/treeseed-ai/template-engineering/releases/download/${encodeURIComponent(tag)}/engineering-template.tgz`,sha256:`sha256:${artifact}`},contract:{path:"template.contract.json",sha256:`sha256:${contract}`}},null,2)+"\n")' "$commit" "${{ inputs.tag }}" "$version" "$artifact_sha256" "$contract_sha256"
+          node -e 'const fs=require("node:fs");const [commit,tag,version,artifact,contract]=process.argv.slice(1);fs.writeFileSync("release/out/template-release.json",JSON.stringify({schemaVersion:"treeseed.project-template-release/v1",id:"engineering",version,repository:"treeseed-ai/template-engineering",commit,tag,artifact:{url:`https://github.com/treeseed-ai/template-engineering/releases/download/${encodeURIComponent(tag)}/engineering-template.tgz`,sha256:`sha256:${artifact}`},contract:{path:"template.contract.json",sha256:`sha256:${contract}`}},null,2)+"\n")' "$commit" "$GITHUB_REF_NAME" "$version" "$artifact_sha256" "$contract_sha256"
       - uses: actions/attest-build-provenance@977bb373ede98d70efdf65b84cb5f73e068dcc2a
         with:
           subject-path: release/out/engineering-template.tgz
       - name: Publish immutable release assets
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh release create "${{ inputs.tag }}" release/out/engineering-template.tgz release/out/template-release.json template.contract.json --prerelease --verify-tag --title "TreeSeed Engineering Template ${{ inputs.tag }}"
+        run: gh release create "$GITHUB_REF_NAME" release/out/engineering-template.tgz release/out/template-release.json template.contract.json --prerelease --verify-tag --title "TreeSeed Engineering Template $GITHUB_REF_NAME"
