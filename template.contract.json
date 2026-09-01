@@ -1,7 +1,7 @@
 {
   "schemaVersion": "treeseed.project-template-contract/v1",
   "id": "engineering",
-  "version": "1.0.0-rc.2",
+  "version": "1.0.0-rc.3",
   "category": "starter",
   "projectKind": "application",
   "platformProfile": "engineering",
