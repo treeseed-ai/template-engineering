@@ -1,0 +1,36 @@
+schemaVersion: treeseed.package/v1
+id: template-engineering
+name: TreeSeed Engineering Template
+kind: content
+type: project-template
+repository: treeseed-ai/template-engineering
+capabilities: { save: true, verify: true, publish: false, deploy: false, localOnly: false }
+workflowTemplateVersion: "1"
+githubEnvironments: [production]
+verify: { fast: git diff --check, local: git diff --check, release: git diff --check }
+releaseGate: { workflow: verify.yml }
+development:
+  schemaVersion: treeseed.development-runtime/v1
+  project: { id: template-engineering, repository: treeseed-ai/template-engineering }
+  defaults: { leaseSeconds: 14400, restoreOnFailure: true }
+  targets:
+    - id: source
+      kind: source-check
+      platforms: [linux-amd64, linux-arm64, darwin-arm64, darwin-amd64]
+      runtimeRequirements: [git]
+      sourceRoots: [template, treeseed.template.yaml, template.config.json, template.contract.json]
+      ignoredPaths: [template/node_modules, template/dist]
+      operations:
+        verify: { command: git, args: [diff, --check], environment: {}, timeoutSeconds: 120 }
+      ready: { kind: marker, path: treeseed.template.yaml, timeoutSeconds: 30 }
+      outputs: []
+      endpoints: []
+      dependencies: []
+      statePolicy: stateless
+      migrationPolicy: none
+      secretRefs: {}
+      shutdown: { graceSeconds: 0, activeWorkPolicy: block }
+      resources: {}
+      logs: []
+      forbiddenOperations: [publish, production-tag]
+      promotion: { liveAdmissible: false, candidateRequiresVerification: true }
