@@ -3,5 +3,6 @@ dist/
 .astro/
 .agent-worktrees/
 .treeseed/generated/
+.treeseed/library/
 .treeseed/test-reports/
 public/books/

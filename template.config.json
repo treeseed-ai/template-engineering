@@ -74,7 +74,6 @@
       "tsconfig.json",
       "treeseed.site.yaml",
       "src/content.config.ts",
-      "src/content/config.ts",
       "src/config.yaml",
       "src/manifest.yaml",
       "src/env.yaml"

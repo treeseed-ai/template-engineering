@@ -12,7 +12,7 @@
   "library": {
     "required": true,
     "provider": "treedx",
-    "contentRoot": "src/content"
+    "contentRoot": "."
   },
   "inventory": {
     "materializationPath": "packages/{slug}",
