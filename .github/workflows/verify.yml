@@ -21,6 +21,7 @@ jobs:
           cache-dependency-path: template/package-lock.json
       - name: Verify immutable template contract
         run: |
+          test ! -d template/src/content
           node <<'NODE'
           const fs = require('node:fs');
           const crypto = require('node:crypto');
@@ -29,6 +30,7 @@ jobs:
           const config = JSON.parse(fs.readFileSync(contract.configuration, 'utf8'));
           const pkg = JSON.parse(fs.readFileSync(`${contract.templateRoot}/package.json`, 'utf8'));
           if (contract.schemaVersion !== 'treeseed.project-template-contract/v1') throw new Error('Unexpected template contract schema.');
+          if (contract.library?.contentRoot !== '.') throw new Error('TreeDX library content must use the repository root.');
           if (contract.id !== config.id || contract.version !== config.templateVersion || contract.projectKind !== config.projectKind || contract.platformProfile !== config.platformProfile) throw new Error('Template contract/config identity drift.');
           for (const [name, version] of Object.entries(contract.dependencies)) if (pkg.dependencies[name] !== version) throw new Error(`Dependency drift for ${name}.`);
           for (const value of Object.values(pkg.dependencies)) if (/^[~^]|latest|next|\*/u.test(value)) throw new Error(`Moving dependency selector ${value}.`);
