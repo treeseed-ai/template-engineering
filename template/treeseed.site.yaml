@@ -1,19 +1,17 @@
 name: __SITE_NAME__
 slug: __SITE_SLUG__
-siteUrl: __SITE_URL__
-contactEmail: __CONTACT_EMAIL__
+siteUrl: https://example.com
+contactEmail: hello@example.com
 projectRoot: ..
 hosting:
   kind: hosted_project
   registration: optional
-  marketBaseUrl: https://knowledge.coop
+  marketBaseUrl: https://api.treeseed.dev
   teamId: __SITE_SLUG__
   projectId: __SITE_SLUG__
 cloudflare:
   accountId: replace-with-cloudflare-account-id
   workerName: __SITE_SLUG__
-  queueName: __SITE_SLUG__-agent-work
-  dlqName: __SITE_SLUG__-agent-work-dlq
   pages:
     projectName: __SITE_SLUG__
     previewProjectName: __SITE_SLUG__-staging
@@ -28,7 +26,7 @@ surfaces:
     publicBaseUrl: https://__SITE_SLUG__.pages.dev
     localBaseUrl: http://127.0.0.1:4321
 plugins:
-  - package: '@treeseed/core/plugin-default'
+  - package: '@treeseed/sdk/plugin-default'
 providers:
   forms: store_only
   agents:
@@ -48,4 +46,3 @@ smtp:
   enabled: false
 turnstile:
   enabled: false
-

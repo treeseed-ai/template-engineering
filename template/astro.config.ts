@@ -1,7 +1,3 @@
-import { createTreeseedTenantSite } from '@treeseed/core/config';
-import type { AstroUserConfig } from 'astro/config';
+import { createTenantSite } from '@treeseed/core/config';
 
-const config: AstroUserConfig = createTreeseedTenantSite();
-
-export default config;
-
+export default createTenantSite();

@@ -2,5 +2,6 @@
 
 First-party TreeSeed starter for software projects where a TreeSeed docs project guides research, architecture, implementation, review, and release.
 
-This directory is submodule-ready and is intended to become `treeseed-ai/starter-engineering`.
+The protected release publishes a digest-bound starter archive and `treeseed.project-template-release/v1` manifest. SDK/CLI project creation consumes that immutable contract; generated application source is committed to the created project repository and is never written into Platform Git.
 
+Project knowledge, objectives, and agent definitions belong to the project’s TreeDX library at its repository root. The starter contains no tracked knowledge collection; `.treeseed/library/` is an ignored runtime cache only.
